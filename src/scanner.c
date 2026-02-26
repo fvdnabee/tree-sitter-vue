@@ -24,21 +24,23 @@ typedef struct {
 
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 
+#ifndef TREE_SITTER_DEBUG
 static inline void advance(TSLexer *lexer) { lexer->advance(lexer, false); }
 
 static inline void skip(TSLexer *lexer) { lexer->advance(lexer, true); }
+#else
+#define advance(lexer)                                                                                                 \
+    do {                                                                                                               \
+        printf("advance %c, line: %d\n", lexer->lookahead, __LINE__);                                                  \
+        lexer->advance(lexer, false);                                                                                \
+    } while (0)
 
-// #define advance(lexer)                                                                                                 \
-//     do {                                                                                                               \
-//         printf("advance %c, line: %d\n", lexer->lookahead, __LINE__);                                                  \
-//         (lexer->advance)(lexer, false);                                                                                \
-//     } while (0)
-//
-// #define skip(lexer) \
-//     do { \
-//         printf("skip %c, line: %d\n", lexer->lookahead, __LINE__); \
-//         (lexer->advance)(lexer, true); \
-//     } while (0)
+#define skip(lexer) \
+    do { \
+        printf("skip %c, line: %d\n", lexer->lookahead, __LINE__); \
+        lexer->advance(lexer, true); \
+    } while (0)
+#endif
 
 static unsigned serialize(Scanner *scanner, char *buffer) {
     uint16_t tag_count = scanner->tags.size > UINT16_MAX ? UINT16_MAX : scanner->tags.size;
@@ -147,6 +149,7 @@ static bool scan_comment(TSLexer *lexer) {
                     lexer->mark_end(lexer);
                     return true;
                 }
+                // fallthrough
             default:
                 dashes = 0;
         }
@@ -166,7 +169,7 @@ static bool scan_raw_text(Scanner *scanner, TSLexer *lexer) {
 
     unsigned delimiter_index = 0;
     while (lexer->lookahead) {
-        if (towupper(lexer->lookahead) == end_delimiter[delimiter_index]) {
+        if ((char)towupper(lexer->lookahead) == end_delimiter[delimiter_index]) {
             delimiter_index++;
             if (delimiter_index == strlen(end_delimiter)) {
                 break;

@@ -1,0 +1,34 @@
+{
+  "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/config.schema.json",
+  "grammars": [
+    {
+      "name": "vue",
+      "title": "Vue.js",
+      "scope": "source.vue",
+      "file-types": [
+        "vue"
+      ],
+      "injection-regex": "^vue$",
+      "highlights": "queries/highlights.scm",
+      "injections": "queries/injections.scm"
+    }
+  ],
+  "metadata": {
+    "version": "0.21.0",
+    "license": "MIT",
+    "description": "Vue.js grammar for tree-sitter",
+    "authors": [
+      {
+        "name": "Ika",
+        "email": "ikatyang@gmail.com"
+      },
+      {
+        "name": "Amaan Qureshi",
+        "email": "amaanq12@gmail.com"
+      }
+    ],
+    "links": {
+      "repository": "https://github.com/tree-sitter-grammars/tree-sitter-vue"
+    }
+  }
+}

@@ -5,6 +5,9 @@
  * @see {@link https://tree-sitter.github.io/tree-sitter/creating-parsers}
  */
 
+/// <reference types="tree-sitter-cli/dsl" />
+// @ts-check
+
 const HTML = require('tree-sitter-html/grammar');
 
 module.exports = grammar(HTML, {
@@ -123,9 +126,9 @@ module.exports = grammar(HTML, {
  *
  * @param {number} precedence
  *
- * @param {(RegExp|String)[]} literals
+ * @param {(RegExp | string)[]} literals
  *
- * @return {ChoiceRule}
+ * @returns {ChoiceRule}
  */
 function immediateLiterals(precedence, ...literals) {
   return choice(...literals.map(l => token.immediate(prec(precedence, l))));
@@ -137,9 +140,9 @@ function immediateLiterals(precedence, ...literals) {
  *
  * @param {number} precedence
  *
- * @param {(RegExp|String)[]} literals
+ * @param {(RegExp | string)[]} literals
  *
- * @return {ChoiceRule}
+ * @returns {ChoiceRule}
  */
 function tokenLiterals(precedence, ...literals) {
   return choice(...literals.map(l => token(prec(precedence, l))));
